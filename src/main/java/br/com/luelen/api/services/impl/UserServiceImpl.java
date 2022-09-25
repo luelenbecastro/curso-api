@@ -4,6 +4,7 @@ import br.com.luelen.api.domain.Usuario;
 import br.com.luelen.api.domain.dto.UserDTO;
 import br.com.luelen.api.repositories.UserRepository;
 import br.com.luelen.api.services.UserService;
+import br.com.luelen.api.services.exceptions.DataIntegratyViolationException;
 import br.com.luelen.api.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Usuario create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, Usuario.class));
+    }
+
+    private void findByEmail(UserDTO obj) {
+        Optional<Usuario> user = repository.findByEmail(obj.getEmail());
+        if(user.isPresent()) {
+            throw new DataIntegratyViolationException("E-mail já cadastrado no sistema");
+        }
     }
 }
