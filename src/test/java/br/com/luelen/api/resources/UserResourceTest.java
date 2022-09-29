@@ -34,7 +34,7 @@ class UserResourceTest {
 
 
     private Usuario user;
-    private UserDTO userDTO;
+    private UserDTO userDTO = new UserDTO();
     private Optional<Usuario> optionalUsuario;
 
 
